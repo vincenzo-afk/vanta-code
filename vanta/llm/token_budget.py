@@ -53,8 +53,7 @@ def estimate_cost(prompt_tokens: int, completion_tokens: int, model: str = "groq
     """
     rates: dict[str, tuple[float, float]] = {
         "groq": (0.0, 0.0),                   # Free tier
-        "gemini-1.5-flash": (0.00035, 0.00105),  # per 1k tokens input/output
-        "gemini-1.5-pro": (0.0035, 0.0105),
+
     }
     input_rate, output_rate = rates.get(model, (0.002, 0.006))
     return (prompt_tokens / 1000) * input_rate + (completion_tokens / 1000) * output_rate

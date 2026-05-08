@@ -1,6 +1,3 @@
-"""Default configuration values and vanta.toml template."""
-
-DEFAULT_TOML = """\
 [project]
 name = "my-project"
 language = "python"
@@ -25,7 +22,7 @@ exclude_patterns = ["**/node_modules/**", "**/__pycache__/**", "**/.venv/**"]
 embedding_model = "all-MiniLM-L6-v2"
 
 [tui]
-theme = "{theme}"
+theme = "classic"
 panel_widths = [20, 55, 25]
 show_file_tree = true
 show_terminal = true
@@ -38,4 +35,3 @@ max_retries = 3
 dry_run = false
 auto_commit = false
 verbose_tools = false
-"""

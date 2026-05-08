@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
-
 from rich.console import Console
 
 from vanta.agent.context_manager import ContextManager
@@ -49,12 +47,11 @@ class AgentLoop:
         self.ctx_manager.add_user_message(self.state, task)
 
         # Optional: inject memory context
-        memory_results: list[dict] = []
         if self.config and self.config.memory.enabled:
             try:
                 from vanta.memory.retriever import Retriever
                 retriever = Retriever(config=self.config)
-                memory_results = await retriever.query(task, top_k=3)
+                await retriever.query(task, top_k=3)
             except Exception:
                 pass
 

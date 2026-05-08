@@ -9,7 +9,6 @@ from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
-
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
@@ -87,9 +86,8 @@ class CodebaseIndex(BaseModel):
 
 class LLMConfig(BaseModel):
     provider: str = "groq"
-    fallback_provider: str = "gemini"
+    groq_api_key: str | None = None
     groq_model: str = "llama3-70b-8192"
-    gemini_model: str = "gemini-1.5-flash"
     context_budget: int = 6000
     complexity_threshold: float = 0.7
     temperature: float = 0.2

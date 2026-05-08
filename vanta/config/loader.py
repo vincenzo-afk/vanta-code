@@ -61,11 +61,8 @@ def load_config(toml_path: str | None = None) -> VantaConfig:
 
     llm_cfg = LLMConfig(
         provider=llm_raw.get("provider", "groq"),
-        fallback_provider=llm_raw.get("fallback_provider", "gemini"),
+        groq_api_key=os.getenv("GROQ_API_KEY") or llm_raw.get("groq_api_key"),
         groq_model=os.getenv("VANTA_GROQ_MODEL", llm_raw.get("groq_model", "llama3-70b-8192")),
-        gemini_model=os.getenv(
-            "VANTA_GEMINI_MODEL", llm_raw.get("gemini_model", "gemini-1.5-flash")
-        ),
         context_budget=int(llm_raw.get("context_budget", 6000)),
         complexity_threshold=float(llm_raw.get("complexity_threshold", 0.7)),
         temperature=float(llm_raw.get("temperature", 0.2)),

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Optional
 
 import typer
 from rich.console import Console
@@ -16,14 +15,19 @@ def run(
     dry_run: bool = typer.Option(False, "--dry-run", help="Simulate without file writes."),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Print all tool calls."),
     no_memory: bool = typer.Option(False, "--no-memory", help="Skip memory retrieval."),
-    output_file: Optional[str] = typer.Option(None, "--output-file", help="Save output to file."),
+    output_file: str | None = typer.Option(None, "--output-file", help="Save output to file."),
 ) -> None:
     """Execute a task non-interactively and exit."""
-    from vanta.config.loader import load_config
     from vanta.agent.loop import AgentLoop
+    from vanta.config.loader import load_config
     from vanta.models import SessionState
 
     config = load_config()
+
+    # Prompt for API key if not set
+    if not config.llm.groq_api_key:
+        config.llm.groq_api_key = typer.prompt("Enter Groq API key (securely stored for session)", hide_input=True)
+
     if dry_run:
         config.dry_run = True
         config.agent.dry_run = True

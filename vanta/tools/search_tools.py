@@ -82,9 +82,17 @@ async def web_search_docs(
         return "No results found."
 
     from vanta.llm.router import route_query
+    from pathlib import Path
+
+    prompt_path = Path("prompts/doc_search.txt")
+    if prompt_path.exists():
+        prompt = prompt_path.read_text(encoding="utf-8")
+        prompt = prompt.replace("{{QUERY}}", query).replace("{{RESULTS}}", snippets)
+    else:
+        prompt = f"Summarize these search results for the query '{query}':\n{snippets}"
 
     summary = await route_query(
-        task=f"Summarize these search results for the query '{query}':\n{snippets}",
+        task=prompt,
         complexity="low",
         config=config,
     )

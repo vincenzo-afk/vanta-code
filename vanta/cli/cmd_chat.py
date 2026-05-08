@@ -21,6 +21,10 @@ def chat(
 
     config = load_config()
 
+    # Prompt for API key if not set
+    if not config.llm.groq_api_key:
+        config.llm.groq_api_key = typer.prompt("Enter Groq API key (securely stored for session)", hide_input=True)
+
     if theme:
         config.tui.theme = theme
     if model:

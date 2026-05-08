@@ -37,14 +37,17 @@ def version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
-@app.callback()
+@app.callback(invoke_without_command=True)
 def callback(
+    ctx: typer.Context,
     version: bool = typer.Option(
         None, "--version", "-v", callback=version_callback, is_eager=True,
         help="Show version and exit."
     ),
 ) -> None:
     """Vanta Code — The autonomous CLI coding agent with a soul."""
+    if ctx.invoked_subcommand is None:
+        chat()
 
 
 def main() -> None:

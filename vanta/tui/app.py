@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import asyncio
 from pathlib import Path
 
-from textual.app import App, ComposeResult
+from textual.app import App, ComposeResult, on
 from textual.binding import Binding
 from textual.containers import Horizontal
+from textual.widgets import Input
 
 from vanta.tui.panels.chat_panel import ChatPanel
 from vanta.tui.panels.file_tree import FileTreePanel
@@ -34,7 +34,6 @@ class VantaApp(App):
         Binding("ctrl+z", "undo_last", "Undo"),
         Binding("f1", "toggle_memory_panel", "Memory"),
         Binding("f2", "toggle_terminal", "Terminal"),
-        Binding("enter", "send_message", "Send"),
     ]
 
     def __init__(self, config=None, **kwargs):
@@ -51,7 +50,7 @@ class VantaApp(App):
             self.CSS_PATH = str(_THEMES_DIR / f"{theme}.tcss")
 
     def compose(self) -> ComposeResult:
-        from textual.widgets import Header, Footer
+        from textual.widgets import Footer, Header
 
         yield Header(show_clock=True)
         with Horizontal():
@@ -78,8 +77,13 @@ class VantaApp(App):
         theme_data = get_theme(self.config.tui.theme if self.config else "classic")
         chat.add_message("agent", theme_data["banner"] + "\nReady. Type a task to begin.")
 
-    async def action_send_message(self) -> None:
-        """Handle Enter key — submit input and run agent."""
+    @on(Input.Submitted, "#input")
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        """Handle input submission — run agent task."""
+        self.run_worker(self._send_message())
+
+    async def _send_message(self) -> None:
+        """Handle message sending asynchronously."""
         input_bar = self.query_one(InputBar)
         task = input_bar.submit()
         if not task:
@@ -101,9 +105,7 @@ class VantaApp(App):
         try:
             assert self._agent_loop is not None
             status.set_state("acting")
-            result = await asyncio.get_event_loop().run_in_executor(
-                None, lambda: asyncio.run(self._agent_loop.run_task(task))
-            )
+            result = await self._agent_loop.run_task(task)
             chat.add_message("agent", result)
             status.set_state("idle")
             terminal.write_success("Done.")
@@ -115,18 +117,23 @@ class VantaApp(App):
     async def _handle_slash_command(self, cmd: str) -> None:
         """Process /command shortcuts."""
         chat = self.query_one(ChatPanel)
+        terminal = self.query_one(TerminalPanel)
+        status = self.query_one(StatusBar)
         parts = cmd.split()
         command = parts[0].lower()
 
-        if command in ("/help", "/h"):
+        if command in ("/help", "/h", "/"):
             chat.add_message("agent", (
-                "**Slash Commands:**\n"
-                "- `/help` — this message\n"
-                "- `/clear` — clear chat\n"
+                "**Available Commands:**\n"
+                "- `/help` — show this help message\n"
+                "- `/clear` — clear chat history\n"
                 "- `/plan` — show current plan\n"
                 "- `/theme <name>` — switch theme (classic|hacker|sakura)\n"
                 "- `/dry-run toggle` — toggle dry-run mode\n"
-                "- `/exit` — quit"
+                "- `/search <query>` — search web/docs for information\n"
+                "- `/analyze <target>` — analyze code or file\n"
+                "- `/generate <description>` — generate code based on description\n"
+                "- `/exit` — quit the application"
             ))
         elif command == "/clear":
             chat.clear()
@@ -143,8 +150,37 @@ class VantaApp(App):
                 chat.add_message("agent", f"**Current Plan:**\n```\n{plan_str}\n```")
             else:
                 chat.add_message("agent", "No active plan.")
+        elif command == "/search" and len(parts) > 1:
+            query = " ".join(parts[1:])
+            task = f"Search the web and documentation for: {query}"
+            await self._run_agent_task(task, chat, terminal, status)
+        elif command == "/analyze" and len(parts) > 1:
+            target = " ".join(parts[1:])
+            task = f"Analyze the following code or file: {target}"
+            await self._run_agent_task(task, chat, terminal, status)
+        elif command == "/generate" and len(parts) > 1:
+            desc = " ".join(parts[1:])
+            task = f"Generate code that does: {desc}"
+            await self._run_agent_task(task, chat, terminal, status)
         else:
             chat.add_message("agent", f"Unknown command: `{cmd}`. Type `/help` for list.")
+
+    async def _run_agent_task(self, task: str, chat, terminal, status) -> None:
+        """Helper to run agent task for slash commands."""
+        status.set_state("planning")
+        terminal.write_info(f"Task: {task[:60]}")
+
+        try:
+            assert self._agent_loop is not None
+            status.set_state("acting")
+            result = await self._agent_loop.run_task(task)
+            chat.add_message("agent", result)
+            status.set_state("idle")
+            terminal.write_success("Done.")
+        except Exception as exc:
+            chat.add_message("agent", f"**Error:** {exc}")
+            status.set_state("idle")
+            terminal.write_error(str(exc))
 
     async def _switch_theme(self, theme_name: str) -> None:
         css_path = _THEMES_DIR / f"{theme_name}.tcss"

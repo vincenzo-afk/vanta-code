@@ -57,48 +57,20 @@ async def route_query(
     system: str = "",
 ) -> str:
     """
-    Route a task to the appropriate LLM based on complexity.
+    Route tasks to Groq LLM.
 
     Args:
         task: The task / prompt text.
-        complexity: Explicit hint: 'low' | 'medium' | 'high'. If None, auto-scored.
+        complexity: Ignored (always uses Groq).
         config: VantaConfig instance.
         system: Optional system prompt.
 
     Returns:
         LLM response string.
     """
-    threshold = config.llm.complexity_threshold if config else 0.7
-    score = score_complexity(task) if complexity is None else (
-        0.9 if complexity == "high" else 0.5 if complexity == "medium" else 0.2
-    )
-
-    use_gemini = score >= threshold
-
-    # Fallback: if primary key missing, try the other
-    if use_gemini:
-        try:
-            from vanta.llm.gemini_client import GeminiClient
-            client = GeminiClient(config=config)
-            return await client.complete(task, system=system)
-        except (ValueError, Exception):
-            pass
-        try:
-            from vanta.llm.groq_client import GroqClient
-            client = GroqClient(config=config)  # type: ignore[assignment]
-            return await client.complete(task, system=system)
-        except Exception as exc:
-            raise RuntimeError(f"All LLM providers failed: {exc}") from exc
-    else:
-        try:
-            from vanta.llm.groq_client import GroqClient
-            client = GroqClient(config=config)
-            return await client.complete(task, system=system)
-        except (ValueError, Exception):
-            pass
-        try:
-            from vanta.llm.gemini_client import GeminiClient
-            client = GeminiClient(config=config)  # type: ignore[assignment]
-            return await client.complete(task, system=system)
-        except Exception as exc:
-            raise RuntimeError(f"All LLM providers failed: {exc}") from exc
+    try:
+        from vanta.llm.groq_client import GroqClient
+        client = GroqClient(config=config)
+        return await client.complete(task, system=system)
+    except Exception as exc:
+        raise RuntimeError(f"Groq LLM failed: {exc}") from exc
