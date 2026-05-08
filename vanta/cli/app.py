@@ -38,7 +38,7 @@ def version_callback(value: bool) -> None:
 
 
 @app.callback()
-def main(
+def callback(
     version: bool = typer.Option(
         None, "--version", "-v", callback=version_callback, is_eager=True,
         help="Show version and exit."
@@ -47,5 +47,10 @@ def main(
     """Vanta Code — The autonomous CLI coding agent with a soul."""
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Entry point for the CLI."""
     app()
+
+
+if __name__ == "__main__":
+    main()
