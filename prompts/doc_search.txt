@@ -1,0 +1,15 @@
+Summarize the following search results into a concise, actionable answer for a developer.
+
+Query: {{QUERY}}
+
+Search results:
+{{RESULTS}}
+
+Instructions:
+- Focus on the most relevant and accurate information
+- Include any code examples if present in the results
+- Cite the source URL in parentheses after each key point
+- Keep the answer under 300 words
+- Use markdown formatting
+
+Answer:

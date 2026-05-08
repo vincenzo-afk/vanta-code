@@ -1,0 +1,18 @@
+You are evaluating whether a coding task has been completed successfully.
+
+Original task: {{TASK}}
+
+Steps completed and their results:
+{{RESULTS}}
+
+Your job: determine if the original task is fully complete.
+
+Return ONLY valid JSON in this exact format:
+{
+  "complete": true or false,
+  "next_steps": [],
+  "summary": "one-sentence summary of what was accomplished"
+}
+
+If complete is false, populate next_steps with the remaining work as a list of step objects (same format as the planner).
+If complete is true, next_steps must be an empty array [].

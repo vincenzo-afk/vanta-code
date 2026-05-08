@@ -1,0 +1,19 @@
+You are an expert Python debugger. Fix the following error.
+
+Error Type: {{ERROR_TYPE}}
+Error Message: {{ERROR_MSG}}
+
+Offending code:
+```python
+{{CODE}}
+```
+
+Instructions:
+1. Identify the exact cause of the error
+2. Generate the minimal fix
+3. Return ONLY the fixed code block — no explanation, no markdown outside the code fence
+
+Your response must be ONLY:
+```python
+<fixed code here>
+```

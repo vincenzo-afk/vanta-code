@@ -1,0 +1,99 @@
+/* Vanta Hacker — Green-on-black terminal theme */
+
+$bg-primary: #000000;
+$bg-secondary: #001a00;
+$bg-tertiary: #003300;
+$border: #00ff41;
+$accent: #00ff41;
+$accent-hover: #39ff74;
+$text-primary: #00ff41;
+$text-secondary: #00cc33;
+$text-muted: #005900;
+$success: #00ff41;
+$warning: #ffff00;
+$error: #ff0000;
+$diff-add: #001a00;
+$diff-add-text: #00ff41;
+$diff-remove: #1a0000;
+$diff-remove-text: #ff0000;
+$spinner: #00ff41;
+
+Screen {
+    background: $bg-primary;
+    color: $text-primary;
+}
+
+Header {
+    background: $bg-secondary;
+    color: $accent;
+    text-style: bold;
+    border-bottom: solid $border;
+}
+
+Footer {
+    background: $bg-secondary;
+    color: $text-muted;
+}
+
+#file-tree {
+    width: 20%;
+    background: $bg-secondary;
+    border-right: solid $border;
+    padding: 1;
+    color: $text-primary;
+}
+
+#chat {
+    width: 55%;
+    background: $bg-primary;
+    padding: 1 2;
+    overflow-y: auto;
+}
+
+#terminal {
+    width: 25%;
+    background: $bg-tertiary;
+    border-left: solid $border;
+    padding: 1;
+    color: $text-secondary;
+    overflow-y: auto;
+}
+
+#input {
+    height: 3;
+    background: $bg-secondary;
+    border: solid $accent;
+    color: $text-primary;
+    padding: 0 1;
+}
+
+#status {
+    height: 1;
+    background: $bg-tertiary;
+    color: $text-muted;
+    padding: 0 1;
+}
+
+.user-message {
+    background: $bg-secondary;
+    border: solid $border;
+    color: $text-primary;
+    padding: 1;
+    margin: 1 0;
+}
+
+.agent-message {
+    background: $bg-primary;
+    border-left: thick $accent;
+    color: $accent;
+    padding: 1;
+    margin: 1 0;
+}
+
+.diff-add { background: $diff-add; color: $diff-add-text; }
+.diff-remove { background: $diff-remove; color: $diff-remove-text; }
+.success { color: $success; }
+.warning { color: $warning; }
+.error { color: $error; }
+.accent { color: $accent; }
+.muted { color: $text-muted; }

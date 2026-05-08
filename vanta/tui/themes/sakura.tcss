@@ -1,0 +1,99 @@
+/* Vanta Sakura — Pink/purple aesthetic theme */
+
+$bg-primary: #0d0a14;
+$bg-secondary: #16102a;
+$bg-tertiary: #1e1535;
+$border: #c9a0dc;
+$accent: #ff79c6;
+$accent-hover: #ff92d5;
+$text-primary: #f8f8f2;
+$text-secondary: #bd93f9;
+$text-muted: #6272a4;
+$success: #50fa7b;
+$warning: #ffb86c;
+$error: #ff5555;
+$diff-add: #1a0d1a;
+$diff-add-text: #50fa7b;
+$diff-remove: #1a0d0d;
+$diff-remove-text: #ff5555;
+$spinner: #ff79c6;
+
+Screen {
+    background: $bg-primary;
+    color: $text-primary;
+}
+
+Header {
+    background: $bg-secondary;
+    color: $accent;
+    text-style: bold;
+    border-bottom: solid $border;
+}
+
+Footer {
+    background: $bg-secondary;
+    color: $text-muted;
+}
+
+#file-tree {
+    width: 20%;
+    background: $bg-secondary;
+    border-right: solid $border;
+    padding: 1;
+    color: $text-primary;
+}
+
+#chat {
+    width: 55%;
+    background: $bg-primary;
+    padding: 1 2;
+    overflow-y: auto;
+}
+
+#terminal {
+    width: 25%;
+    background: $bg-tertiary;
+    border-left: solid $border;
+    padding: 1;
+    color: $text-secondary;
+    overflow-y: auto;
+}
+
+#input {
+    height: 3;
+    background: $bg-secondary;
+    border: solid $accent;
+    color: $text-primary;
+    padding: 0 1;
+}
+
+#status {
+    height: 1;
+    background: $bg-tertiary;
+    color: $text-muted;
+    padding: 0 1;
+}
+
+.user-message {
+    background: $bg-secondary;
+    border: solid $border;
+    color: $text-primary;
+    padding: 1;
+    margin: 1 0;
+}
+
+.agent-message {
+    background: $bg-primary;
+    border-left: thick $accent;
+    color: $text-primary;
+    padding: 1;
+    margin: 1 0;
+}
+
+.diff-add { background: $diff-add; color: $diff-add-text; }
+.diff-remove { background: $diff-remove; color: $diff-remove-text; }
+.success { color: $success; }
+.warning { color: $warning; }
+.error { color: $error; }
+.accent { color: $accent; }
+.muted { color: $text-muted; }

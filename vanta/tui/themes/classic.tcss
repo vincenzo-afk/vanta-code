@@ -1,0 +1,108 @@
+/* Vanta Classic — Professional dark theme */
+
+$bg-primary: #0d1117;
+$bg-secondary: #161b22;
+$bg-tertiary: #21262d;
+$border: #30363d;
+$accent: #58a6ff;
+$accent-hover: #79beff;
+$text-primary: #e6edf3;
+$text-secondary: #8b949e;
+$text-muted: #484f58;
+$success: #3fb950;
+$warning: #d29922;
+$error: #f85149;
+$diff-add: #1a4a1a;
+$diff-add-text: #3fb950;
+$diff-remove: #4a1a1a;
+$diff-remove-text: #f85149;
+$spinner: #58a6ff;
+
+Screen {
+    background: $bg-primary;
+    color: $text-primary;
+}
+
+Header {
+    background: $bg-secondary;
+    color: $accent;
+    text-style: bold;
+    border-bottom: solid $border;
+}
+
+Footer {
+    background: $bg-secondary;
+    color: $text-muted;
+}
+
+#file-tree {
+    width: 20%;
+    background: $bg-secondary;
+    border-right: solid $border;
+    padding: 1;
+    color: $text-primary;
+}
+
+#chat {
+    width: 55%;
+    background: $bg-primary;
+    padding: 1 2;
+    overflow-y: auto;
+}
+
+#terminal {
+    width: 25%;
+    background: $bg-tertiary;
+    border-left: solid $border;
+    padding: 1;
+    color: $text-secondary;
+    overflow-y: auto;
+}
+
+#input {
+    height: 3;
+    background: $bg-secondary;
+    border-top: solid $border;
+    border: solid $accent;
+    color: $text-primary;
+    padding: 0 1;
+}
+
+#status {
+    height: 1;
+    background: $bg-tertiary;
+    color: $text-muted;
+    padding: 0 1;
+}
+
+.user-message {
+    background: $bg-tertiary;
+    border: solid $border;
+    color: $text-primary;
+    padding: 1;
+    margin: 1 0;
+}
+
+.agent-message {
+    background: $bg-secondary;
+    border-left: thick $accent;
+    color: $text-primary;
+    padding: 1;
+    margin: 1 0;
+}
+
+.diff-add {
+    background: $diff-add;
+    color: $diff-add-text;
+}
+
+.diff-remove {
+    background: $diff-remove;
+    color: $diff-remove-text;
+}
+
+.success { color: $success; }
+.warning { color: $warning; }
+.error { color: $error; }
+.accent { color: $accent; }
+.muted { color: $text-muted; }
