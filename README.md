@@ -1,246 +1,60 @@
-# Vanta Code 🖤
+# AutoGit
 
-> **The autonomous CLI coding agent with a soul.**
+**AutoGit** is a fully autonomous AI-native software engineering and version
+control platform, written entirely in Rust. It is not a Git client and not a
+Git wrapper — it is the intelligent reasoning layer that sits *on top of*
+Git. Git remains the low-level object database and history engine; AutoGit
+is the high-level intelligence responsible for repository understanding,
+engineering reasoning, project maintenance, documentation generation,
+collaboration, and autonomous software evolution.
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+AutoGit runs as a single local background service (one async runtime, one
+process) that can manage many repositories at once, each in its own
+isolated worker. AI coding agents talk to AutoGit over the **Model Context
+Protocol (MCP)** using semantic engineering intent ("feature completed",
+"prepare release", "review project") rather than raw Git commands. AutoGit
+decides *what* Git operations that intent actually requires.
 
----
+## Why AutoGit exists
 
-## What is Vanta Code?
+Coding agents today either shell out to raw `git` commands or rely on
+humans to commit, branch, and release correctly. Neither approach lets an
+agent reason about the *health*, *history*, or *architecture* of a
+repository. AutoGit closes that gap by giving every repository:
 
-Vanta Code is a fully autonomous, terminal-native AI coding agent. It reads your project, understands its structure semantically, plans tasks, executes them with real tools, reflects on outcomes, and retries intelligently — all inside a beautiful Textual TUI.
+- A continuously-updated **semantic understanding** of its own code
+- **Persistent memory** that survives far beyond commit messages
+- An **engineering decision layer** that governs commits, branches,
+  releases, and repository maintenance
+- **Self-updating documentation** that never drifts from the real project
+- A **safe autonomy model** (Manual / Assisted / Autonomous) so teams can
+  choose exactly how much control to hand over
 
-```
-❯ vanta chat
-```
+## Documentation map
 
----
-
-## Features
-
-| Feature | Description |
+| Area | Where to look |
 |---|---|
-| **Autonomous Agent Loop** | Plan → Act → Observe → Reflect with up to 50 steps |
-| **Groq LLM Integration** | Fast and powerful AI responses using Groq's Llama models |
-| **Memory Brain** | ChromaDB semantic search + NetworkX knowledge graph |
-| **8 CLI Commands** | `chat`, `run`, `init`, `plot`, `debug`, `commit`, `search`, `config` |
-| **Textual TUI** | 3-panel layout: file tree · chat · terminal |
-| **3 Themes** | `classic`, `hacker`, `sakura` — switchable live with `Ctrl+T` |
-| **AutoDebug** | Reads tracebacks, generates fixes, applies patches, re-runs tests |
-| **AI Commits** | One command to stage, generate a commit message, and push |
-| **Inline Charts** | `vanta plot data.csv` renders beautiful terminal charts |
+| System overview & design principles | [`docs/architecture/OVERVIEW.md`](docs/architecture/OVERVIEW.md) |
+| Async runtime & per-repository workers | [`docs/architecture/RUNTIME.md`](docs/architecture/RUNTIME.md) |
+| Event bus & inter-engine communication | [`docs/architecture/EVENT_BUS.md`](docs/architecture/EVENT_BUS.md) |
+| The 12 core engines | [`docs/engines/`](docs/engines/) |
+| MCP server (agent-facing API) | [`docs/integrations/MCP_SERVER.md`](docs/integrations/MCP_SERVER.md) |
+| GitHub / GitLab / Bitbucket providers | [`docs/integrations/PROVIDERS.md`](docs/integrations/PROVIDERS.md) |
+| Operating modes & policy engine | [`docs/operations/OPERATING_MODES.md`](docs/operations/OPERATING_MODES.md) |
+| Configuration reference | [`docs/operations/CONFIGURATION.md`](docs/operations/CONFIGURATION.md) |
+| Storage, scheduler, plugins, auth, telemetry | [`docs/platform/`](docs/platform/) |
+| Crate layout (Rust workspace) | [`docs/architecture/WORKSPACE_LAYOUT.md`](docs/architecture/WORKSPACE_LAYOUT.md) |
 
----
+## Status
 
-## Installation
-
-### Option 1: System-wide Installation (Recommended)
-
-```bash
-# Clone the repo
-git clone https://github.com/your-org/vanta-code.git
-cd vanta-code
-
-# Install with pip (requires Python 3.11+ with pip)
-pip install -e ".[dev]"
-
-# Copy and configure your API key
-cp .env.example .env
-# Edit .env — add GROQ_API_KEY
-
-# Now you can run 'vanta' from anywhere
-vanta chat
-```
-
-### Option 2: Local Installation (Works on Any OS with Python)
-
-If `pip` is not available globally, use the provided scripts:
-
-**On macOS/Linux:**
-```bash
-# Clone the repo
-git clone https://github.com/your-org/vanta-code.git
-cd vanta-code
-
-# Run the install script (installs in editable mode)
-./install.sh
-
-# Run Vanta
-./run.sh chat
-```
-
-**On Windows:**
-```cmd
-REM Clone the repo
-git clone https://github.com/your-org/vanta-code.git
-cd vanta-code
-
-REM Run the install script
-install.bat
-
-REM Run Vanta
-run.bat chat
-```
-
-**Manual Installation:**
-If the scripts don't work, ensure Python 3.11+ is installed, then:
-```bash
-python3 -m pip install -e .
-# Then run with:
-python3 -m vanta chat
-# The system will prompt for your GROQ_API_KEY if not set
-```
-
----
-
-## Quick Start
-
-```bash
-# 1. Initialize Vanta Code in your project
-cd my-project
-vanta init
-
-# 2. Open the interactive TUI
-vanta chat
-
-# 3. Run a one-shot task
-vanta run "Add docstrings to all public functions in src/"
-
-# 4. Auto-commit with AI message
-vanta commit --push
-
-# 5. Debug a traceback
-python main.py 2>&1 | vanta debug
-
-# 6. Plot a CSV
-vanta plot metrics.csv --type line --title "Accuracy"
-```
-
----
-
-## CLI Commands
-
-```
-vanta init        Initialize Vanta Code (index codebase, create vanta.toml)
-vanta chat        Launch the full Textual TUI
-vanta run <task>  Run a one-shot task non-interactively
-vanta plot <file> Render a terminal chart from CSV/JSON
-vanta debug       Read a traceback and auto-fix it
-vanta commit      Stage + AI commit message + optional push
-vanta search <q>  Search docs and summarize
-vanta config      View/edit vanta.toml settings
-```
-
----
-
-## TUI Keyboard Shortcuts
-
-| Key | Action |
-|---|---|
-| `Enter` | Send message / execute task |
-| `Ctrl+T` | Cycle through themes |
-| `Ctrl+Q` | Quit |
-| `Ctrl+F` | Focus file tree |
-| `Ctrl+L` | Clear chat |
-| `F2` | Toggle terminal panel |
-| `↑ / ↓` | Navigate input history |
-| `Ctrl+K` | Show shortcuts |
-
-### Slash Commands (in TUI)
-```
-/help        Show all commands
-/clear       Clear chat history
-/plan        Show the current execution plan
-/theme <n>   Switch theme: classic | hacker | sakura
-/exit        Quit
-```
-
----
-
-## Configuration (`vanta.toml`)
-
-```toml
-[project]
-name = "my-project"
-language = "python"
-conventions = "Use type hints, docstrings for public APIs."
-
-[llm]
-provider = "groq"
-groq_model = "llama3-70b-8192"
-
-[memory]
-enabled = true
-chroma_path = ".vanta/chroma"
-
-[tui]
-theme = "classic"               # classic | hacker | sakura
-
-[agent]
-max_steps = 50
-dry_run = false
-auto_commit = false
-```
-
----
-
-## Architecture
-
-```
-vanta/
-├── agent/          # Plan → Act → Observe → Reflect loop
-│   ├── loop.py     # AgentLoop (main orchestrator)
-│   ├── planner.py  # Task → PlanSteps decomposition
-│   ├── executor.py # Tool dispatch (parallel-aware)
-│   └── reflector.py # Post-action self-evaluation
-├── llm/
-│   ├── router.py   # Complexity-based model routing
-│   ├── groq_client.py
-│   └── gemini_client.py
-├── memory/
-│   ├── indexer.py  # File walker + chunker + embedder
-│   ├── chroma_store.py # ChromaDB wrapper
-│   ├── graph.py    # NetworkX knowledge graph
-│   └── retriever.py # Unified query interface
-├── tools/          # 15+ agent-callable tools
-├── tui/            # Textual 3-panel UI + 3 themes
-├── cli/            # Typer CLI (8 commands)
-└── config/         # vanta.toml loader + Pydantic schema
-```
-
----
-
-## Environment Variables
-
-| Variable | Description |
-|---|---|
-| `GROQ_API_KEY` | Groq API key (required) |
-| `VANTA_GROQ_MODEL` | Override Groq model name |
-| `VANTA_LOG_LEVEL` | Log level: DEBUG / INFO / WARNING |
-| `VANTA_LOG_FILE` | Path to log file |
-| `VANTA_SEARXNG_URL` | Custom SearXNG instance for web search |
-
----
-
-## Development
-
-```bash
-# Install dev dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest tests/ -v
-
-# Lint
-ruff check vanta/
-
-# Type check
-mypy vanta/
-```
-
----
+This repository currently contains the **complete design and
+documentation set** for AutoGit. Implementation (the Rust workspace under
+`crates/`) follows the architecture defined here and has not been written
+yet — docs are being finalized first so every engine has an agreed
+contract before code is generated against it.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+TBD — a `LICENSE` file will be generated by the Project Bootstrap Engine
+once implementation begins (see
+[`docs/engines/PROJECT_BOOTSTRAP.md`](docs/engines/PROJECT_BOOTSTRAP.md)).
