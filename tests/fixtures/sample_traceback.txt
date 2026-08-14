@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "src/main.py", line 42, in main
-    result = compute(x, y)
-  File "src/utils.py", line 17, in compute
-    return a / b
-ZeroDivisionError: division by zero
